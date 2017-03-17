@@ -23,6 +23,9 @@ public class OpenLAPDynamicParams {
     }
 
     public void addOpenLAPDynamicParam(OpenLAPDynamicParam param) throws OpenLAPDynamicParamException {
+        if(param == null)
+            throw new OpenLAPDynamicParamException("No dynamic parameter object to add.");
+
         String paramId = param.getId();
         if (paramId == null || paramId.isEmpty() || params.containsKey(paramId))
             throw new OpenLAPDynamicParamException(OpenLAPDynamicParamException.PARAM_ALREADY_EXISTS, paramId);

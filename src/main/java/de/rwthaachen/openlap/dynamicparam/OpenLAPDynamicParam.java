@@ -3,22 +3,36 @@ package de.rwthaachen.openlap.dynamicparam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class OpenLAPDynamicParam {
+public class OpenLAPDynamicParam<T> {
 
     private final OpenLAPDynamicParamType type;
+    private final OpenLAPDynamicParamDataType dataType;
     private String id;
     private String title;
     private String description;
-    private String defaultValue;
     private String possibleValues;
+    private T defaultValue;
+    private T value;
     private boolean required;
 
     public OpenLAPDynamicParam() {
         this.type = null;
+        this.dataType = null;
     }
 
-    public OpenLAPDynamicParam(OpenLAPDynamicParamType type, String id, String title, String description, String defaultValue, String possibleValues, boolean required) {
+    /**
+     * @param type
+     * @param dataType
+     * @param id
+     * @param title
+     * @param description
+     * @param defaultValue
+     * @param possibleValues semicolon separated values
+     * @param required
+     */
+    public OpenLAPDynamicParam(OpenLAPDynamicParamType type, OpenLAPDynamicParamDataType dataType, String id, String title, String description, T defaultValue, String possibleValues, boolean required) {
         this.type = type;
+        this.dataType = dataType;
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,28 +45,16 @@ public class OpenLAPDynamicParam {
         return type;
     }
 
+    public OpenLAPDynamicParamDataType getDataType() {
+        return dataType;
+    }
+
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public boolean isRequired() {
-        return required;
-    }
-
-    public void setRequired(boolean required) {
-        this.required = required;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getTitle() {
@@ -63,39 +65,49 @@ public class OpenLAPDynamicParam {
         this.title = title;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPossibleValues() {
+        return possibleValues;
+    }
+
+    public void setPossibleValues(String possibleValues) {
+        this.possibleValues = possibleValues;
+    }
+
+    public T getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(T defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
+    public void setRequired(boolean required) {
+        this.required = required;
+    }
+
     public boolean validateDynamicParam(OpenLAPDynamicParam openLAPDynamicParam) {
         return openLAPDynamicParam.getType().equals(this.getType())
                 && (openLAPDynamicParam.getId().equals(this.getId()));
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OpenLAPDynamicParam)) return false;
-
-        OpenLAPDynamicParam that = (OpenLAPDynamicParam) o;
-
-        if (isRequired() != that.isRequired()) return false;
-        if (getType() != that.getType()) return false;
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
-        if (getTitle() != null ? !getTitle().equals(that.getTitle()) : that.getTitle() != null) return false;
-        if (getDescription() != null ? !getDescription().equals(that.getDescription()) : that.getDescription() != null)
-            return false;
-        if (defaultValue != null ? !defaultValue.equals(that.defaultValue) : that.defaultValue != null) return false;
-        return possibleValues != null ? possibleValues.equals(that.possibleValues) : that.possibleValues == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getType() != null ? getType().hashCode() : 0;
-        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
-        result = 31 * result + (getTitle() != null ? getTitle().hashCode() : 0);
-        result = 31 * result + (getDescription() != null ? getDescription().hashCode() : 0);
-        result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
-        result = 31 * result + (possibleValues != null ? possibleValues.hashCode() : 0);
-        result = 31 * result + (isRequired() ? 1 : 0);
-        return result;
     }
 
     @Override
@@ -106,11 +118,13 @@ public class OpenLAPDynamicParam {
         } catch (JsonProcessingException e) {
             return "OpenLAPDynamicParam{" +
                     "type=" + type +
+                    ", dataType=" + dataType +
                     ", id='" + id + '\'' +
                     ", title='" + title + '\'' +
                     ", description='" + description + '\'' +
-                    ", defaultValue='" + defaultValue + '\'' +
                     ", possibleValues='" + possibleValues + '\'' +
+                    ", defaultValue=" + defaultValue +
+                    ", value=" + value +
                     ", required=" + required +
                     '}';
         }
